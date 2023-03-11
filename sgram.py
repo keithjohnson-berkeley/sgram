@@ -24,7 +24,7 @@ def sgram(filename,chan=0,start=0,end=-1,tf=8000,band='wb',save_name='',slice_ti
         w = nb
     else:
         w = wb
-    
+     
     # set up parameters for the spectrogram window
     figheight = 4.5
     max_figwidth = 12 # maximum figure width in inches
@@ -55,20 +55,20 @@ def sgram(filename,chan=0,start=0,end=-1,tf=8000,band='wb',save_name='',slice_ti
         new_size = int(len(raw) * resample_ratio)  # how many samples in downsampled version?
         x = signal.resample(raw,new_size)  # now sampled at desired sampling freq
             
-    i1 = int(start * sf)   # index of starting time (in resampled waveform
+    i1 = int(start * sf)   # index of starting time: seconds to samples
     i2 = int(end * sf)     # index of ending time
     if i2<0 or i2>len(x):  # stop at the end of the waveform
         i2 = len(x)
     if i1>i2:              # don't let start follow end
         i1=0
     
-    x2 = np.rint(31000 * (x[i1:i2]/max(x[i1:i2])))  # scale the signal chunk
-    x2 = np.append(x2[0], x2[1:] - preemph * x2[:-1])  # apply pre-emphasis
+    x2 = np.append(x[0], x[1:] - preemph * x[:-1])  # apply pre-emphasis
+    x2 = np.rint(31000 * (x2[i1:i2]/max(x2[i1:i2]))).astype(np.int16)  # scale the signal chunk
 
     # ----------- compute the spectrogram ---------------------------------
     f,ts,Sxx = signal.spectrogram(x2,fs=sf,noverlap = noverlap, window=window, nperseg = nperseg, 
                               nfft = nfft, scaling=scaling, mode = mode, detrend = 'linear')
-    Sxx = 20* np.log(Sxx+1)  # put spectrum on decibel scale
+    Sxx = 20 * np.log10(Sxx+1)  # put spectrum on decibel scale
     
     # ------------ display in a matplotlib figure --------------------
     ts = np.add(ts,start)  # increment the spectrogram time by the start value
@@ -84,7 +84,7 @@ def sgram(filename,chan=0,start=0,end=-1,tf=8000,band='wb',save_name='',slice_ti
         fig = plt.figure(figsize=(figwidth, figheight),dpi=72)
         ax1 = fig.add_subplot(111)
 
-    extent = (min(ts),max(ts),min(f),max(f))  # get the time and frequency values for indeces.
+    extent = (min(ts),max(ts),min(f),max(f))  # get the time and frequency values for indices.
 
     im = ax1.imshow(Sxx, aspect='auto', interpolation='nearest', cmap=cmap, vmin = 25, 
                 extent = extent, origin='lower')
