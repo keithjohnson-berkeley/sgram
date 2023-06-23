@@ -63,7 +63,7 @@ def sgram(filename,chan=0,start=0,end=-1,tf=8000,band='wb',save_name='',slice_ti
         i1=0
     
     x2 = np.append(x[0], x[1:] - preemph * x[:-1])  # apply pre-emphasis
-    x2 = np.rint(31000 * (x2[i1:i2]/max(x2[i1:i2]))).astype(np.int16)  # scale the signal chunk
+    x2 = np.rint(32000 * (x2[i1:i2]/max(x2[i1:i2]))).astype(np.intc)  # scale the signal chunk
 
     # ----------- compute the spectrogram ---------------------------------
     f,ts,Sxx = signal.spectrogram(x2,fs=sf,noverlap = noverlap, window=window, nperseg = nperseg, 
