@@ -107,14 +107,3 @@ def sgram(filename,chan=0,start=0,end=-1,tf=8000,band='wb',save_name='',slice_ti
         plt.savefig(save_name,dpi=300,bbox_inches='tight')
         
     return (f,ts,Sxx)
-
-# ------- toy with finding first two peaks ---------------
-# find the first peak in the spectrum starting at "startfreq"
-# report the amplitude and the frequency of the peak
-def Spectral_peak(x,startfreq,sf,npoints):
-    df = sf/npoints     # step size on the frequency scale
-    start = int(startfreq/df)
-    for i in range(start,len(x)):
-        if ((x[i-1]<x[i]) & (x[i+1]<x[i])):
-            break  # stop after finding a peak
-    return x[i],i*df

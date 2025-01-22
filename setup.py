@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
   name = 'sgram',
-  version='0.2.0',
+  version='0.2.1',
   py_modules = ['sgram'],
   classifiers = [
     'Intended Audience :: Science/Research',
